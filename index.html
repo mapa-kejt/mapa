@@ -2428,8 +2428,9 @@
              const cx = (longitude + 180) * (mapWidth / 360);
               const cy = ((90 - latitude) * (mapHeight / 180));
           
-              const scaledCx = (cx * svgMapRect.width) / mapWidth;
-              const scaledCy = (cy * svgMapRect.height) / mapHeight;
+            const scaledCx = (cx * svgMapParent.clientWidth) / mapWidth;
+const scaledCy = (cy * svgMapParent.clientHeight) / mapHeight;
+
           
               var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
               marker.setAttribute('cx', scaledCx);
