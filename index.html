@@ -2432,8 +2432,8 @@
               ];
         
               points.forEach(function (point) {
-                const cx = (point.longitude + 180) * (mapWidth / 360);
-                const cy = ((90 - point.latitude) * (mapHeight / 180));
+                const cx = ((point.longitude + 180) * (mapWidth / 360)) * (svgMapRect.width / mapWidth);
+const cy = ((90 - point.latitude) * (mapHeight / 180)) * (svgMapRect.height / mapHeight);
         
                 // Display the blue marker based on the user's proximity to each point
                 var distance = calculateDistance(latitude, longitude, point.latitude, point.longitude);
