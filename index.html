@@ -2293,7 +2293,7 @@
         <path class="st114" d="M535.9,712c8,5.8,17.2,7.7,26.9,7.9c1.4,0,2.6,0.8,3.1,2.1c-2.9-0.2-5.7-1.6-8.7-1
             C548.1,722.6,541.9,717.6,535.9,712z"/>
     </g>
-    <g id="svStosija" class="map-point" data-modal="myModal1" data-latitude="44.127204894681576" data-longitude="15.23749511295614">
+    <g id="svStosija" class="map-point" data-modal="myModal1" cx="44.127204894681576" cy="15.23749511295614">
         <path class="st139" d="M336.3,374l-1-0.9l-15.8-15.7c-3-3-5.1-6.7-6.3-10.7c-0.9-2.9-1.2-6-0.9-9.1c0.5-5.8,3.1-11.1,7.3-15.1
             c3.6-3.6,8.3-5.9,13.3-6.6c8.8-1.2,16.2,1.5,22.1,8.1c2.9,3.1,4.8,7.1,5.5,11.3c1.7,8-0.9,16.2-6.7,21.9
             c-5.3,5.5-10.8,10.8-16.2,16.2l-0.7,0.6L336.3,374L336.3,374z"/>
@@ -2416,11 +2416,11 @@
     </g>
         </svg>  
         <script>
-         function displayUserLocation(latitude, longitude) {
+       function displayUserLocation(latitude, longitude, closestPointId) {
             const mapWidth = 1817; // Width of the SVG map in pixels
             const mapHeight = 984; // Height of the SVG map in pixels
 
-            var svgMapParent = document.getElementById('myDiv');
+            var svgMapParent = document.getElementById('zoom');
             var svgMapRect = svgMapParent.getBoundingClientRect();
 
             const cx = (longitude + 180) * (mapWidth / 360);
@@ -2432,49 +2432,41 @@
             var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             marker.setAttribute('cx', scaledCx);
             marker.setAttribute('cy', scaledCy);
-            marker.setAttribute('r', 5);
+            marker.setAttribute('r', 12);
             marker.setAttribute('fill', 'blue');
 
             var svgMap = document.getElementById('map-svg');
             svgMap.appendChild(marker);
-        }
 
-        function handleLocationPermission() {
+            // Add a class to the closest point for styling
+            var closestPoint = document.getElementById(closestPointId);
+            closestPoint.classList.add('closest-point');
+          }
+
+          function handleLocationPermission() {
             if (navigator.permissions) {
-                navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
-                    if (result.state === 'granted') {
-                        getCurrentLocation();
-                    } else if (result.state === 'prompt') {
-                        requestLocationPermission();
-                    }
-                });
-            } else {
-                getCurrentLocation();
-            }
-        }
-
-        function getCurrentLocation() {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var userLatitude = position.coords.latitude;
-                var userLongitude = position.coords.longitude;
-                displayUserLocation(userLatitude, userLongitude);
-            });
-        }
-
-        function requestLocationPermission() {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    getCurrentLocation();
-                },
-                function (error) {
-                    console.error('Error getting location:', error);
+              navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                if (result.state === 'granted') {
+                  getCurrentLocation();
+                } else if (result.state === 'prompt') {
+                  requestLocationPermission();
                 }
-            );
-        }
+              });
+            } else {
+              getCurrentLocation();
+            }
+          }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            handleLocationPermission();
-        });
+          function getCurrentLocation() {
+            navigator.geolocation.getCurrentPosition(function (position) {
+              var userLatitude = position.coords.latitude;
+              var userLongitude = position.coords.longitude;
+              var closestPointId = 'svStosija'; // Replace with the actual ID of the closest point
+              displayUserLocation(userLatitude, userLongitude, closestPointId);
+            });
+          }
+
+          function request
           </script>
       </div>
 
