@@ -2416,7 +2416,7 @@
     </g>
         </svg>  
         <script>
-    function displayUserLocation(latitude, longitude) {
+function displayUserLocation(latitude, longitude) {
   const mapWidth = 1817; // Width of the SVG map in pixels
   const mapHeight = 984; // Height of the SVG map in pixels
 
@@ -2444,8 +2444,8 @@
   const cx = (longitude + 180) * (mapWidth / 360);
   const cy = (90 - latitude) * (mapHeight / 180);
 
-  const scaledCx = cx * scaleX;
-  const scaledCy = cy * scaleY;
+  const scaledCx = cx * (svgMapRect.width / mapWidth) * scaleX;
+  const scaledCy = cy * (svgMapRect.height / mapHeight) * scaleY;
 
   var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   marker.setAttribute('cx', scaledCx);
