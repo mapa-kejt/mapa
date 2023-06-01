@@ -1,0 +1,440 @@
+html {
+  background: #ffffff;
+  color: #1d396b;
+  text-align: center;
+  font-family: "Times New Roman", serif;
+}
+body {
+  max-width: 1200px;
+  overflow-x: hidden;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+
+  background-color: inherit;
+  transition: transform 0.7s ease-in-out;
+}
+
+.btn-grad {
+  background-image: linear-gradient(
+    to left,
+    #1d396b 0%,
+    #3498db 51%,
+    #1d396b 100%
+  );
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4%;
+  padding: 0% 3%;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: table;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  overflow: hidden;
+}
+
+.btn-grad p {
+  padding: auto;
+  line-height: 1;
+  font-size: 95%;
+  font-weight: bold;
+  display: table-cell; /* Add this line */
+  vertical-align: middle; /* Add this line */
+  line-height: 1;
+}
+
+.see-more-button {
+  background-image: linear-gradient(
+    to left,
+    #1d396b 0%,
+    #3498db 51%,
+    #1d396b 100%
+  );
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  padding: 0% 4%;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: table;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  overflow: hidden;
+}
+.see-more-button p {
+  font-size: 95%;
+  font-weight: bold;
+  display: table-cell; /* Add this line */
+  vertical-align: middle; /* Add this line */
+  line-height: 1;
+}
+
+.btn-grad:hover,
+.see-more-button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.back-button {
+  color: #1d396b;
+  float: left;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.back-button:hover,
+.back-button:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+div,
+img,
+footer {
+  position: relative;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.25s ease-in-out;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Times New Roman", serif;
+  font-weight: 300;
+}
+h1 {
+  font-size: 36pt;
+}
+h2 {
+  font-size: 28pt;
+  text-align: center;
+}
+h3 {
+  font-size: 18pt;
+}
+
+p {
+  font-size: 20px;
+}
+
+.distribution-map {
+  position: relative;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.map-point {
+  cursor: pointer;
+}
+
+.map-point:hover {
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* modal */
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 1%; /* Location of the box */
+  padding-bottom: 1%;
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  margin: auto;
+  padding: 0;
+  border: none;
+  width: 90%;
+  max-width: 750px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.lang {
+  color: white;
+  float: left;
+  padding-right: 1%;
+  width: 4%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lang:active {
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+#languages {
+  box-sizing: border-box;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2%;
+  padding-bottom: 1%;
+  background-color: #1d396b;
+  color: white;
+}
+
+.modal-body {
+  padding: 2% 7%;
+  background-color: rgba(229, 229, 229);
+  color: #1a1a1a;
+  height: max-content;
+}
+
+.modal-footer {
+  padding: 2%;
+  background-color: #1d396b;
+  color: white;
+}
+
+/*end modal */
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.column1 {
+  float: left;
+  width: 50%;
+}
+
+.column1 img {
+  max-width: 100%;
+  height: auto;
+}
+
+.column2 {
+  float: left;
+  width: 50%;
+  padding-left: 3%;
+  padding-right: 3%;
+  text-align: left;
+  text-justify: inter-word;
+}
+.column2 p {
+  font-size: 18.5px;
+}
+
+.column2 span {
+  white-space: pre-line;
+  text-align-last: left;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.about p {
+  font-size: 19px;
+}
+
+/* GALERIJA */
+
+.image-gallery {
+  width: 90%;
+  margin: 5% auto;
+}
+
+.current-image {
+  width: 100%;
+}
+
+.image-thumbs {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.container {
+  overflow: hidden;
+  width: 100%;
+  height: 90%;
+  margin-bottom: 2%;
+}
+
+@media screen and (max-width: 900px) {
+  body {
+    max-width: 97%;
+    overflow-x: hidden;
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .distribution-map {
+    position: relative;
+    box-sizing: border-box;
+    margin-top: 40%;
+    margin-bottom: 20%;
+    width: 100%;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+
+  .column1,
+  .column2 {
+    width: 100%;
+  }
+
+  .column2 p {
+    text-align: center;
+  }
+
+  .column2 span {
+    white-space: normal;
+    text-align-last: center;
+  }
+
+  .column2 {
+    text-align-last: center;
+  }
+
+  .image-thumbs {
+    width: 80%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .see-more-button {
+    margin-top: 0;
+  }
+
+  .see-more-button p {
+    padding-top: auto;
+    padding-bottom: auto;
+  }
+
+  .container {
+    overflow: hidden;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 0%;
+  }
+
+  .lang {
+    width: 30px;
+    margin-right: 5px;
+    margin-top: 2%;
+  }
+
+  #languages {
+    margin-left: 3%;
+  }
+
+  .modal-header h2 {
+    padding-top: 10%;
+  }
+
+  .close {
+    padding-right: 4%;
+    font-size: 40px;
+  }
+}
