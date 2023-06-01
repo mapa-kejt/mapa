@@ -2416,68 +2416,58 @@
     </g>
         </svg>  
         <script>
-    function displayUserLocation(latitude, longitude) {
+
+            // Define the points with their associated coordinates
+// Define the points with their associated coordinates
+var points = [
+  { id: 'svetaStosija', latitude: 44.127204894681576, longitude: 15.23749511295614 },
+  { id: 'svetiRoko', latitude: 44.12636170880619, longitude: 15.238860383372325 }
+  // Add more points as needed
+];
+
+function displayUserLocation(latitude, longitude) {
   const mapWidth = 1817; // Width of the SVG map in pixels
   const mapHeight = 984; // Height of the SVG map in pixels
 
   var svgMapParent = document.getElementById('zoom');
   var svgMapRect = svgMapParent.getBoundingClientRect();
 
-  // Define the points with their associated coordinates
-  var points = [
-    { id: 'svetaStosija', latitude: 44.127204894681576, longitude: 15.23749511295614 },
-    { id: 'svetiRoko', latitude: 44.12636170880619, longitude: 15.238860383372325 },
-    // Add more points as needed
-  ];
+  const cx = (longitude + 180) * (mapWidth / 360);
+  const cy = ((90 - latitude) * (mapHeight / 180));
 
+  const scaledCx = (cx * svgMapParent.clientWidth) / mapWidth;
+  const scaledCy = (cy * svgMapParent.clientHeight) / mapHeight;
+
+  var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  marker.setAttribute('cx', scaledCx);
+  marker.setAttribute('cy', scaledCy);
+  marker.setAttribute('r', 12);
+  marker.setAttribute('fill', 'blue');
+
+  var svgMap = document.getElementById('map-svg');
+  svgMap.appendChild(marker);
+
+  // Calculate and display the distance between the user and each point
   points.forEach(function (point) {
-    const cx = (point.longitude + 180) * (mapWidth / 360);
-    const cy = ((90 - point.latitude) * (mapHeight / 180));
-
-    // Calculate the distance between the user's location and the point
     var distance = calculateDistance(latitude, longitude, point.latitude, point.longitude);
-
-    // Display the blue marker based on the user's proximity to each point
-    if (distance <= 1) { // Distance in kilometers (adjust as needed)
-      var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      marker.setAttribute('cx', cx);
-      marker.setAttribute('cy', cy);
-      marker.setAttribute('r', 12);
-      marker.setAttribute('fill', 'blue');
-
-      var svgMap = document.getElementById('map-svg');
-      var group = svgMap.getElementById(point.id);
-      group.appendChild(marker);
-    }
+    console.log('Distance to', point.id + ':', distance + ' km');
   });
 }
 
-// Function to calculate the distance between two points using the Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const earthRadius = 6371; // Radius of the Earth in kilometers
-
-  // Convert latitude and longitude to radians
-  const lat1Rad = degreesToRadians(lat1);
-  const lon1Rad = degreesToRadians(lon1);
-  const lat2Rad = degreesToRadians(lat2);
-  const lon2Rad = degreesToRadians(lon2);
-
-  // Calculate the differences between the latitudes and longitudes
-  const latDiff = lat2Rad - lat1Rad;
-  const lonDiff = lon2Rad - lon1Rad;
-
-  // Calculate the distance using the Haversine formula
-  const a =
-    Math.sin(latDiff / 2) ** 2 +
-    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(lonDiff / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = earthRadius * c;
-
-  return distance;
+  var R = 6371; // Radius of the Earth in kilometers
+  var dLat = toRadians(lat2 - lat1);
+  var dLon = toRadians(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var distance = R * c;
+  return distance.toFixed(2);
 }
 
-function degreesToRadians(degrees) {
-  return (degrees * Math.PI) / 180;
+function toRadians(degrees) {
+  return degrees * (Math.PI / 180);
 }
 
 function handleLocationPermission() {
@@ -2490,7 +2480,7 @@ function handleLocationPermission() {
       }
     });
   } else {
-    requestLocationPermission();
+    getCurrentLocation();
   }
 }
 
@@ -2503,13 +2493,20 @@ function getCurrentLocation() {
 }
 
 function requestLocationPermission() {
-  // Show a location permission request dialog or custom UI to the user
-  // Call getCurrentLocation() if permission is granted
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      getCurrentLocation();
+    },
+    function (error) {
+      console.error('Error getting location:', error);
+    }
+  );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   handleLocationPermission();
 });
+
           </script>
       </div>
 
