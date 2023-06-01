@@ -9,10 +9,14 @@ function handleLocationPermission() {
         getCurrentLocation();
       } else if (result.state === 'prompt') {
         requestLocationPermission();
+      } else {
+        console.error('Location permission denied.');
       }
+    }).catch(function(error) {
+      console.error('Error requesting location permission:', error);
     });
   } else {
-    getCurrentLocation();
+    console.error('Geolocation API not supported.');
   }
 }
 
@@ -21,6 +25,8 @@ function getCurrentLocation() {
     var userLatitude = position.coords.latitude;
     var userLongitude = position.coords.longitude;
     displayUserLocation(userLatitude, userLongitude);
+  }, function(error) {
+    console.error('Error getting location:', error);
   });
 }
 
@@ -46,7 +52,7 @@ function displayUserLocation(latitude, longitude) {
   var points = [
     { id: 'svetaStosija', latitude: 44.127204894681576, longitude: 15.23749511295614 }, // Add coordinates for point 1
     { id: 'svetiRoko', latitude: 44.12636170880619, longitude: 15.238860383372325 }, // Add coordinates for point 2
-    
+  
     // Add more points as needed
   ];
 
@@ -69,7 +75,24 @@ function displayUserLocation(latitude, longitude) {
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  // Implement the Haversine formula or any other distance calculation formula here
-  // ...
+  const earthRadius = 6371; // Radius of the Earth in kilometers
+
+  // Convert latitude and longitude from degrees to radians
+  const lat1Rad = (lat1 * Math.PI) / 180;
+  const lon1Rad = (lon1 * Math.PI) / 180;
+  const lat2Rad = (lat2 * Math.PI) / 180;
+  const lon2Rad = (lon2 * Math.PI) / 180;
+
+  // Calculate the differences between coordinates
+  const latDiff = lat2Rad - lat1Rad;
+  const lonDiff = lon2Rad - lon1Rad;
+
+  // Apply the Haversine formula
+  const a =
+    Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(lonDiff / 2) * Math.sin(lonDiff / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
   return distance; // Distance in kilometers
 }
