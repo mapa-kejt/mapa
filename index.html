@@ -35,7 +35,7 @@
     <div id="myDiv" class="distribution-map-1 "  >
     
       <div id="zoom" >  
-        <?xml version="1.0" encoding="utf-8"?>e
+        <?xml version="1.0" encoding="utf-8"?>
      
 
    
@@ -2417,41 +2417,67 @@
         </svg>  
         <script>
     
-    function displayUserLocation(latitude, longitude) {
-  const mapWidth = 1817; // Width of the SVG map in pixels
-  const mapHeight = 984; // Height of the SVG map in pixels
 
-  // Define the coordinates of the points on the map
-  const points = [
-    { id: 'svetaStosija', mapX: 336.8, mapY: 374.7 }, // Example point
-    // Add more points as needed
-  ];
+            function displayUserLocation(latitude, longitude) {
+              const mapWidth = 1817; // Width of the SVG map in pixels
+              const mapHeight = 984; // Height of the SVG map in pixels
+          
+              var svgMapParent = document.getElementById('zoom');
+              var svgMapRect = svgMapParent.getBoundingClientRect();
+          
+              const cx = (longitude + 180) * (mapWidth / 360);
+              const cy = ((90 - latitude) * (mapHeight / 180));
+          
+              const scaledCx = (cx * svgMapParent.clientWidth) / mapWidth;
+const scaledCy = (cy * svgMapParent.clientHeight) / mapHeight;
 
-  // Find the closest point to the user's location
-  let closestPoint = null;
-  let closestDistance = Number.MAX_VALUE;
-  for (const point of points) {
-    const distance = calculateDistance(latitude, longitude, point.latitude, point.longitude);
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestPoint = point;
-    }
-  }
-
-  if (closestPoint) {
-    const scaledCx = closestPoint.mapX * (mapWidth / 1000); // Adjust the scaling factor as needed
-    const scaledCy = closestPoint.mapY * (mapHeight / 1000); // Adjust the scaling factor as needed
-
-    var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    marker.setAttribute('cx', scaledCx);
-    marker.setAttribute('cy', scaledCy);
-    marker.setAttribute('r', 12);
-    marker.setAttribute('fill', 'blue');
-
-    var svgMap = document.getElementById('map-svg');
-    svgMap.appendChild(marker);
-  }
-}
+          
+              var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              marker.setAttribute('cx', scaledCx);
+              marker.setAttribute('cy', scaledCy);
+              marker.setAttribute('r', 12);
+              marker.setAttribute('fill', 'blue');
+          
+              var svgMap = document.getElementById('map-svg');
+              svgMap.appendChild(marker);
+            }
+          
+            function handleLocationPermission() {
+              if (navigator.permissions) {
+                navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                  if (result.state === 'granted') {
+                    getCurrentLocation();
+                  } else if (result.state === 'prompt') {
+                    requestLocationPermission();
+                  }
+                });
+              } else {
+                getCurrentLocation();
+              }
+            }
+          
+            function getCurrentLocation() {
+              navigator.geolocation.getCurrentPosition(function (position) {
+                var userLatitude = position.coords.latitude;
+                var userLongitude = position.coords.longitude;
+                displayUserLocation(userLatitude, userLongitude);
+              });
+            }
+          
+            function requestLocationPermission() {
+              navigator.geolocation.getCurrentPosition(
+                function (position) {
+                  getCurrentLocation();
+                },
+                function (error) {
+                  console.error('Error getting location:', error);
+                }
+              );
+            }
+          
+            document.addEventListener('DOMContentLoaded', function () {
+              handleLocationPermission();
+            });
           </script>
       </div>
 
