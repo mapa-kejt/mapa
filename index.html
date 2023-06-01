@@ -2425,8 +2425,9 @@
               var svgMapParent = document.getElementById('zoom');
               var svgMapRect = svgMapParent.getBoundingClientRect();
           
-              const cx = (longitude + 180) * (mapWidth / 360);
-              const cy = ((90 - latitude) * (mapHeight / 180));
+             const cx = ((point.longitude + 180) * (mapWidth / 360)) * (svgMapRect.width / mapWidth);
+const cy = ((90 - point.latitude) * (mapHeight / 180)) * (svgMapRect.height / mapHeight);
+
           
               const scaledCx = (cx * svgMapRect.width) / mapWidth;
               const scaledCy = (cy * svgMapRect.height) / mapHeight;
