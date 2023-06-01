@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="style/style.css" rel="stylesheet">
 <script src='https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <script >         navigator.geolocation.getCurrentPosition(function(position) {
     // Retrieve latitude and longitude from position object
@@ -18,6 +20,12 @@
   }, function(error) {
     // Handle error case if the user denies location access or if the browser does not support geolocation
   });</script>
+
+<style>
+    #svg-map {
+      width: 100%;
+      height: 100vh;
+  </style>
 </head>
 <body>
 
@@ -2416,67 +2424,59 @@
     </g>
         </svg>  
         <script>
-    
+     function displayUserLocation(latitude, longitude) {
+      const mapWidth = 1817; // Width of the SVG map in pixels
+      const mapHeight = 984; // Height of the SVG map in pixels
+      
+      const cx = (longitude + 180) * (mapWidth / 360);
+      const cy = (90 - latitude) * (mapHeight / 180);
+      
+      var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      marker.setAttribute('cx', cx);
+      marker.setAttribute('cy', cy);
+      marker.setAttribute('r', 12);
+      marker.setAttribute('fill', 'blue');
+      
+      var svgMap = document.getElementById('svg-map');
+      svgMap.appendChild(marker);
+    }
 
-            function displayUserLocation(latitude, longitude) {
-              const mapWidth = 1817; // Width of the SVG map in pixels
-              const mapHeight = 984; // Height of the SVG map in pixels
-          
-              var svgMapParent = document.getElementById('zoom');
-              var svgMapRect = svgMapParent.getBoundingClientRect();
-          
-              const cx = (longitude + 180) * (mapWidth / 360);
-              const cy = ((90 - latitude) * (mapHeight / 180));
-          
-              const scaledCx = (cx * svgMapRect.width) / mapWidth;
-              const scaledCy = (cy * svgMapRect.height) / mapHeight;
-          
-              var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-              marker.setAttribute('cx', scaledCx);
-              marker.setAttribute('cy', scaledCy);
-              marker.setAttribute('r', 12);
-              marker.setAttribute('fill', 'blue');
-          
-              var svgMap = document.getElementById('map-svg');
-              svgMap.appendChild(marker);
-            }
-          
-            function handleLocationPermission() {
-              if (navigator.permissions) {
-                navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
-                  if (result.state === 'granted') {
-                    getCurrentLocation();
-                  } else if (result.state === 'prompt') {
-                    requestLocationPermission();
-                  }
-                });
-              } else {
-                getCurrentLocation();
-              }
-            }
-          
-            function getCurrentLocation() {
-              navigator.geolocation.getCurrentPosition(function (position) {
-                var userLatitude = position.coords.latitude;
-                var userLongitude = position.coords.longitude;
-                displayUserLocation(userLatitude, userLongitude);
-              });
-            }
-          
-            function requestLocationPermission() {
-              navigator.geolocation.getCurrentPosition(
-                function (position) {
-                  getCurrentLocation();
-                },
-                function (error) {
-                  console.error('Error getting location:', error);
-                }
-              );
-            }
-          
-            document.addEventListener('DOMContentLoaded', function () {
-              handleLocationPermission();
-            });
+    function handleLocationPermission() {
+      if (navigator.permissions) {
+        navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
+          if (result.state === 'granted') {
+            getCurrentLocation();
+          } else if (result.state === 'prompt') {
+            requestLocationPermission();
+          }
+        });
+      } else {
+        getCurrentLocation();
+      }
+    }
+
+    function getCurrentLocation() {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var userLatitude = position.coords.latitude;
+        var userLongitude = position.coords.longitude;
+        displayUserLocation(userLatitude, userLongitude);
+      });
+    }
+
+    function requestLocationPermission() {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          getCurrentLocation();
+        },
+        function(error) {
+          console.error('Error getting location:', error);
+        }
+      );
+    }
+
+    $(document).ready(function() {
+      handleLocationPermission();
+    });
           </script>
       </div>
 
