@@ -2416,54 +2416,100 @@
     </g>
         </svg>  
         <script>
-     function displayUserLocation(latitude, longitude) {
-    const mapWidth = 1817; // Width of the SVG map in pixels
-    const mapHeight = 984; // Height of the SVG map in pixels
+    function displayUserLocation(latitude, longitude) {
+  const mapWidth = 1817; // Width of the SVG map in pixels
+  const mapHeight = 984; // Height of the SVG map in pixels
 
-    // Define the points with their associated coordinates
-    var points = [
-      { id: 'svetaStosija', latitude: 44.127204894681576, longitude: 15.23749511295614 },
-      { id: 'svetiRoko', latitude: 44.12636170880619, longitude: 15.238860383372325 },
-      // Add more points as needed
-    ];
+  var svgMapParent = document.getElementById('zoom');
+  var svgMapRect = svgMapParent.getBoundingClientRect();
 
-    points.forEach(function (point) {
-      const cx = (point.longitude + 180) * (mapWidth / 360);
-      const cy = ((90 - point.latitude) * (mapHeight / 180));
+  // Define the points with their associated coordinates
+  var points = [
+    { id: 'svetaStosija', latitude: 44.127204894681576, longitude: 15.23749511295614 },
+    { id: 'svetiRoko', latitude: 44.12636170880619, longitude: 15.238860383372325 },
+    // Add more points as needed
+  ];
 
-      // Calculate the distance between the user's location and the point
-      var distance = calculateDistance(latitude, longitude, point.latitude, point.longitude);
+  points.forEach(function (point) {
+    const cx = (point.longitude + 180) * (mapWidth / 360);
+    const cy = ((90 - point.latitude) * (mapHeight / 180));
 
-      // Display the blue marker based on the user's proximity to each point
-      if (distance <= 1) { // Distance in kilometers (adjust as needed)
-        var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        marker.setAttribute('cx', cx);
-        marker.setAttribute('cy', cy);
-        marker.setAttribute('r', 12);
-        marker.setAttribute('fill', 'blue');
+    // Calculate the distance between the user's location and the point
+    var distance = calculateDistance(latitude, longitude, point.latitude, point.longitude);
 
-        var svgMap = document.getElementById('map-svg');
-        var group = svgMap.getElementById(point.id);
-        group.appendChild(marker);
+    // Display the blue marker based on the user's proximity to each point
+    if (distance <= 1) { // Distance in kilometers (adjust as needed)
+      var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      marker.setAttribute('cx', cx);
+      marker.setAttribute('cy', cy);
+      marker.setAttribute('r', 12);
+      marker.setAttribute('fill', 'blue');
+
+      var svgMap = document.getElementById('map-svg');
+      var group = svgMap.getElementById(point.id);
+      group.appendChild(marker);
+    }
+  });
+}
+
+// Function to calculate the distance between two points using the Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const earthRadius = 6371; // Radius of the Earth in kilometers
+
+  // Convert latitude and longitude to radians
+  const lat1Rad = degreesToRadians(lat1);
+  const lon1Rad = degreesToRadians(lon1);
+  const lat2Rad = degreesToRadians(lat2);
+  const lon2Rad = degreesToRadians(lon2);
+
+  // Calculate the differences between the latitudes and longitudes
+  const latDiff = lat2Rad - lat1Rad;
+  const lonDiff = lon2Rad - lon1Rad;
+
+  // Calculate the distance using the Haversine formula
+  const a =
+    Math.sin(latDiff / 2) ** 2 +
+    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(lonDiff / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance;
+}
+
+function degreesToRadians(degrees) {
+  return (degrees * Math.PI) / 180;
+}
+
+function handleLocationPermission() {
+  if (navigator.permissions) {
+    navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+      if (result.state === 'granted') {
+        getCurrentLocation();
+      } else if (result.state === 'prompt') {
+        requestLocationPermission();
       }
     });
+  } else {
+    requestLocationPermission();
   }
+}
 
-  // Function to calculate the distance between two points using the Haversine formula
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const earthRadius = 6371; // Radius of the Earth in kilometers
+function getCurrentLocation() {
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var userLatitude = position.coords.latitude;
+    var userLongitude = position.coords.longitude;
+    displayUserLocation(userLatitude, userLongitude);
+  });
+}
 
-    // Convert latitude and longitude to radians
-    const lat1Rad = degreesToRadians(lat1);
-    const lon1Rad = degreesToRadians(lon1);
-    const lat2Rad = degreesToRadians(lat2);
-    const lon2Rad = degreesToRadians(lon2);
+function requestLocationPermission() {
+  // Show a location permission request dialog or custom UI to the user
+  // Call getCurrentLocation() if permission is granted
+}
 
-    // Calculate the differences between the latitudes and longitudes
-    const latDiff = lat2Rad - lat1Rad;
-    const lonDiff = lon
-
-
+document.addEventListener('DOMContentLoaded', function () {
+  handleLocationPermission();
+});
           </script>
       </div>
 
