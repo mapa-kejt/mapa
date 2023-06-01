@@ -2416,67 +2416,83 @@
     </g>
         </svg>  
         <script>
-    
+     function displayUserLocation(latitude, longitude) {
+    const mapWidth = 1817; // Width of the SVG map in pixels
+    const mapHeight = 984; // Height of the SVG map in pixels
 
-            function displayUserLocation(latitude, longitude) {
-              const mapWidth = 1817; // Width of the SVG map in pixels
-              const mapHeight = 984; // Height of the SVG map in pixels
-          
-              var svgMapParent = document.getElementById('zoom');
-              var svgMapRect = svgMapParent.getBoundingClientRect();
-          
-              const cx = (longitude + 180) * (mapWidth / 360);
-              const cy = ((90 - latitude) * (mapHeight / 180));
-          
-              const scaledCx = (cx * svgMapRect.width) / mapWidth;
-              const scaledCy = (cy * svgMapRect.height) / mapHeight;
-          
-              var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-              marker.setAttribute('cx', scaledCx);
-              marker.setAttribute('cy', scaledCy);
-              marker.setAttribute('r', 12);
-              marker.setAttribute('fill', 'blue');
-          
-              var svgMap = document.getElementById('map-svg');
-              svgMap.appendChild(marker);
-            }
-          
-            function handleLocationPermission() {
-              if (navigator.permissions) {
-                navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
-                  if (result.state === 'granted') {
-                    getCurrentLocation();
-                  } else if (result.state === 'prompt') {
-                    requestLocationPermission();
-                  }
-                });
-              } else {
-                getCurrentLocation();
-              }
-            }
-          
-            function getCurrentLocation() {
-              navigator.geolocation.getCurrentPosition(function (position) {
-                var userLatitude = position.coords.latitude;
-                var userLongitude = position.coords.longitude;
-                displayUserLocation(userLatitude, userLongitude);
-              });
-            }
-          
-            function requestLocationPermission() {
-              navigator.geolocation.getCurrentPosition(
-                function (position) {
-                  getCurrentLocation();
-                },
-                function (error) {
-                  console.error('Error getting location:', error);
-                }
-              );
-            }
-          
-            document.addEventListener('DOMContentLoaded', function () {
-              handleLocationPermission();
-            });
+    var svgMapParent = document.getElementById('zoom');
+    var svgMapRect = svgMapParent.getBoundingClientRect();
+
+    // Calculate the cx and cy values for each point
+
+    // Point 1
+    var svStosijaLatitude = ...; // Latitude of point 1
+    var svStosijaLongitude = ...; // Longitude of point 1
+    const cx1 = (svStosijaLongitude + 180) * (mapWidth / 360);
+    const cy1 = ((90 - svStosijaLatitude) * (mapHeight / 180));
+
+    // Point 2
+    var svRokoLatitude = ...; // Latitude of point 2
+    var svRokoLongitude = ...; // Longitude of point 2
+    const cx2 = (svRokoLongitude + 180) * (mapWidth / 360);
+    const cy2 = ((90 - svRokoLatitude) * (mapHeight / 180));
+
+    // Point 3
+    var muzejLatitude = ...; // Latitude of point 3
+    var muzejLongitude = ...; // Longitude of point 3
+    const cx3 = (muzejLongitude + 180) * (mapWidth / 360);
+    const cy3 = ((90 - muzejLatitude) * (mapHeight / 180));
+
+    // ... Add more points as needed
+
+    // Display the blue marker based on the user's proximity to each point
+
+    // Point 1
+    var distanceTosvStosija = calculateDistance(latitude, longitude, svStosijaLatitude, svStosijaLongitude);
+    if (distanceTosvStosija <= 0.05) { // Distance in kilometers (50 meters = 0.05 kilometers)
+      var marker1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      marker1.setAttribute('cx', cx1);
+      marker1.setAttribute('cy', cy1);
+      marker1.setAttribute('r', 12);
+      marker1.setAttribute('fill', 'blue');
+      var svgMap = document.getElementById('map-svg');
+      svgMap.appendChild(marker1);
+    }
+
+    // Point 2
+    var distanceTosvRoko = calculateDistance(latitude, longitude, svRokoLatitude, svRokoLongitude);
+    if (distanceTosvRoko <= 0.05) {
+      var marker2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      marker2.setAttribute('cx', cx2);
+      marker2.setAttribute('cy', cy2);
+      marker2.setAttribute('r', 12);
+      marker2.setAttribute('fill', 'blue');
+      var svgMap = document.getElementById('map-svg');
+      svgMap.appendChild(marker2);
+    }
+
+    // Point 3
+    var distanceTomuzej = calculateDistance(latitude, longitude, muzejLatitude, muzejLongitude);
+    if (distanceTomuzej <= 0.05) {
+      var marker3 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      marker3.setAttribute('cx', cx3);
+      marker3.setAttribute('cy', cy3);
+      marker3.setAttribute('r', 12);
+      marker3.setAttribute('fill', 'blue');
+      var svgMap = document.getElementById('map-svg');
+      svgMap.appendChild(marker3);
+    }
+
+    // ... Add more points as needed
+  }
+
+  // Function to calculate the distance between two sets of coordinates
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    // Implementation of the Haversine formula for calculating distance
+    // ...
+
+    return distance; // Distance in kilometers
+  }
           </script>
       </div>
 
