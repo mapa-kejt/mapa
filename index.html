@@ -2416,46 +2416,67 @@
     </g>
         </svg>  
         <script>
-function displayUserLocation(latitude, longitude) {
-  const mapWidth = 1817; // Width of the SVG map in pixels
-  const mapHeight = 984; // Height of the SVG map in pixels
 
-  var svgMapParent = document.getElementById('zoom');
-  var svgMapRect = svgMapParent.getBoundingClientRect();
+            function displayUserLocation(latitude, longitude) {
+              const mapWidth = 1817; // Width of the SVG map in pixels
+              const mapHeight = 984; // Height of the SVG map in pixels
+          
+              var svgMapParent = document.getElementById('zoom');
+              var svgMapRect = svgMapParent.getBoundingClientRect();
+          
+              const cx = (longitude + 180) * (mapWidth / 360);
+              const cy = ((90 - latitude) * (mapHeight / 180));
+          
+              const scaledCx = (cx * svgMapParent.clientWidth) / mapWidth;
+const scaledCy = (cy * svgMapParent.clientHeight) / mapHeight;
 
-  const mapAspectRatio = mapWidth / mapHeight;
-  const containerAspectRatio = svgMapRect.width / svgMapRect.height;
-  const aspectRatioTolerance = 0.01; // Adjust the tolerance as needed
-  const aspectRatiosEqual = Math.abs(mapAspectRatio - containerAspectRatio) < aspectRatioTolerance;
-
-  let scaleX = 1;
-  let scaleY = 1;
-
-  if (!aspectRatiosEqual) {
-    if (mapAspectRatio > containerAspectRatio) {
-      // SVG map is wider, adjust scaleX
-      scaleX = containerAspectRatio / mapAspectRatio;
-    } else {
-      // SVG map is taller, adjust scaleY
-      scaleY = mapAspectRatio / containerAspectRatio;
-    }
-  }
-
-  const cx = (longitude + 180) * (mapWidth / 360);
-  const cy = (90 - latitude) * (mapHeight / 180);
-
-  const scaledCx = cx * (svgMapRect.width / mapWidth) * scaleX;
-  const scaledCy = cy * (svgMapRect.height / mapHeight) * scaleY;
-
-  var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  marker.setAttribute('cx', scaledCx);
-  marker.setAttribute('cy', scaledCy);
-  marker.setAttribute('r', 12);
-  marker.setAttribute('fill', 'blue');
-
-  var svgMap = document.getElementById('map-svg');
-  svgMap.appendChild(marker);
-}
+          
+              var marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              marker.setAttribute('cx', scaledCx);
+              marker.setAttribute('cy', scaledCy);
+              marker.setAttribute('r', 12);
+              marker.setAttribute('fill', 'blue');
+          
+              var svgMap = document.getElementById('map-svg');
+              svgMap.appendChild(marker);
+            }
+          
+            function handleLocationPermission() {
+              if (navigator.permissions) {
+                navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                  if (result.state === 'granted') {
+                    getCurrentLocation();
+                  } else if (result.state === 'prompt') {
+                    requestLocationPermission();
+                  }
+                });
+              } else {
+                getCurrentLocation();
+              }
+            }
+          
+            function getCurrentLocation() {
+              navigator.geolocation.getCurrentPosition(function (position) {
+                var userLatitude = position.coords.latitude;
+                var userLongitude = position.coords.longitude;
+                displayUserLocation(userLatitude, userLongitude);
+              });
+            }
+          
+            function requestLocationPermission() {
+              navigator.geolocation.getCurrentPosition(
+                function (position) {
+                  getCurrentLocation();
+                },
+                function (error) {
+                  console.error('Error getting location:', error);
+                }
+              );
+            }
+          
+            document.addEventListener('DOMContentLoaded', function () {
+              handleLocationPermission();
+            });
           </script>
       </div>
 
